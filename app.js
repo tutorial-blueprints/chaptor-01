@@ -9,6 +9,9 @@ var sassMiddleware = require('node-sass-middleware');
 var index = require('./server/routes/index');
 var users = require('./server/routes/users');
 
+// 코멘트 컨트롤러 불러오기
+var comments = require('./server/controllers/comments');
+
 var app = express();
 
 //  몽구스 ODM
@@ -62,16 +65,21 @@ app.use(session({
   })
 }));
 // 패스포트 인증 초기화
-app.use(passport.initalize());
+app.use(passport.initialize());
 // 영구적인 로그인 세션
 app.use(passport.session());
 // 플래시 메시지
-app.use(flush());
+app.use(flash());
 
 
 /* Routing */
 app.use('/', index);
 app.use('/users', users);
+
+app.get('/comments', comments.hasAuthorization, comments.list);
+app.post('/comments', comments.hasAuthorization, comments.create);
+
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

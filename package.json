@@ -18,7 +18,7 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "start": "node app.js",
+    "start": "nodemon app.js",
     "debug": "DEBUG=chapter-01:* npm start"
   },
   "dependencies": {

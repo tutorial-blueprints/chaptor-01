@@ -1,7 +1,7 @@
 // 패스포트 모듈 로드
 var LocalStrategy = require('passport-local').Strategy;
 // user 모델 가져오기
-var User = require('../models/users');
+var User = require('../models/user');
 
 module.exports = function (passport) {
 
@@ -67,24 +67,25 @@ module.exports = function (passport) {
             if (err)
               return done(err);
             // 이메일 중복 검사
-            if (user)
+            if (user){
               return done(null, false, req.flash('signupMessage', 'Wohh! the email is already taken.'));
-            // user 생성
-            else
-              return done(null, user);
-          });
+            }else{
+              // user 생성
+              var newUser = new User();
 
-          // req.body로 부터 사용자명 가져오기
-          newUser.local.name = req.body.name;
-          newUser.local.email = email;
-          newUser.local.password = newUser.generateHash(password);
-          // 데이터 저장
-          newUSer.save(function (err) {
-            if (err)
-              throw err;
-            return done(null, newUser);
+              // req.body로 부터 사용자명 가져오기
+              newUser.local.name = req.body.name;
+              newUser.local.email = email;
+              newUser.local.password = newUser.generateHash(password);
+              // 데이터 저장
+              newUser.save(function (err) {
+                console.log(err);
+                if (err)
+                  throw err;
+                return done(null, newUser);
+              });
+            }
           });
-
         } else {
           return done(null, req.user);
         }
