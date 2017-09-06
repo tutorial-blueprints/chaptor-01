@@ -22,7 +22,12 @@ exports.list = function (req, res) {
       gravatar: gravatar.url(comments.email, {s: '80', r: 'x', d: 'retro'}, true)
     })
   })
-};
+};$.ajax({
+  url: "test.html",
+  context: document.body
+}).done(function() {
+  $( this ).addClass( "done" );
+});
 
 // 코멘트 작성
 exports.create = function (req, res) {
